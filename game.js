@@ -7,6 +7,8 @@ class RacingGame {
         this.bestScoreElement = document.getElementById('best-score');
         this.finalScoreElement = document.getElementById('final-score');
         this.gameOverElement = document.getElementById('gameOver');
+        this.startScreen = document.getElementById('startScreen');
+        this.startButton = document.getElementById('start-button');
         this.restartButton = document.getElementById('restart-button');
         this.pauseButton = document.getElementById('pause-button');
         this.musicButton = document.getElementById('music-button');
@@ -29,10 +31,11 @@ class RacingGame {
             y: this.canvas.height - 100,
             width: 50,
             height: 80,
-            speed: 5,
+            speed: 8,
             velocity: { x: 0, y: 0 },
-            acceleration: 0.5,
-            friction: 0.95
+            acceleration: 0.8,
+            friction: 0.92,
+            maxSpeed: 12
         };
 
         // Obstacle properties
@@ -54,6 +57,7 @@ class RacingGame {
         window.addEventListener('resize', () => this.resizeCanvas());
 
         // Event listeners
+        this.startButton.addEventListener('click', () => this.showGame());
         this.restartButton.addEventListener('click', () => this.startGame());
         this.pauseButton.addEventListener('click', () => this.togglePause());
         this.musicButton.addEventListener('click', () => this.toggleMusic());
@@ -63,9 +67,21 @@ class RacingGame {
         // Initialize best score
         this.bestScoreElement.textContent = this.bestScore;
 
-        // Start game and music
+        // Show start screen
+        this.showStartScreen();
+    }
+
+    showStartScreen() {
+        this.startScreen.classList.remove('hidden');
+        this.canvas.classList.add('hidden');
+        this.gameOverElement.classList.add('hidden');
+        this.gameRunning = false;
+    }
+
+    showGame() {
+        this.startScreen.classList.add('hidden');
+        this.canvas.classList.remove('hidden');
         this.startGame();
-        this.startMusic();
     }
 
     startMusic() {
@@ -191,6 +207,11 @@ class RacingGame {
         this.car.x = Math.max(this.car.width/2, Math.min(this.canvas.width - this.car.width/2, this.car.x));
         this.car.y = Math.max(this.car.height/2, Math.min(this.canvas.height - this.car.height/2, this.car.y));
 
+        // Draw car
+        this.drawCar();
+    }
+
+    drawCar() {
         // Draw car body with shadow
         this.ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
         this.ctx.shadowBlur = 10;
@@ -361,42 +382,34 @@ class RacingGame {
     }
 
     handleKeyDown(e) {
-        if (!this.gameRunning) return;
+        if (!this.gameRunning || this.isPaused) return;
 
         switch(e.key) {
             case 'ArrowLeft':
-            case 'a':
                 this.car.velocity.x = -this.car.speed;
                 break;
             case 'ArrowRight':
-            case 'd':
                 this.car.velocity.x = this.car.speed;
                 break;
             case 'ArrowUp':
-            case 'w':
                 this.car.velocity.y = -this.car.speed;
                 break;
             case 'ArrowDown':
-            case 's':
                 this.car.velocity.y = this.car.speed;
                 break;
         }
     }
 
     handleKeyUp(e) {
-        if (!this.gameRunning) return;
+        if (!this.gameRunning || this.isPaused) return;
 
         switch(e.key) {
             case 'ArrowLeft':
-            case 'a':
             case 'ArrowRight':
-            case 'd':
                 this.car.velocity.x = 0;
                 break;
             case 'ArrowUp':
-            case 'w':
             case 'ArrowDown':
-            case 's':
                 this.car.velocity.y = 0;
                 break;
         }
