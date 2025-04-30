@@ -16,8 +16,13 @@ body {
 
 .game-container {
     position: relative;
-    max-width: 800px;
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1F2937;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .ad-container {
@@ -125,6 +130,40 @@ body {
 
 .hidden {
     display: none;
+}
+
+.start-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 10px;
+    color: white;
+}
+
+.start-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #3B82F6;
+}
+
+.start-button {
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.start-button:hover {
+    background-color: #2563EB;
+    transform: scale(1.05);
 }
 
 @media (max-width: 600px) {
